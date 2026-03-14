@@ -40,15 +40,15 @@ export function ProductProvider({ children }: { children: ReactNode }) {
   
   // Persistence initialization
   const [cart, setCart] = useState<CartItem[]>(() => {
-    const saved = localStorage.getItem('swiftshop-cart');
+    const saved = sessionStorage.getItem('swiftshop-cart');
     return saved ? JSON.parse(saved) : [];
   });
   const [globalFulfillmentMode, setGlobalFulfillmentMode] = useState<FulfillmentMode>(() => {
-    const saved = localStorage.getItem('swiftshop-fulfillment-mode');
+    const saved = sessionStorage.getItem('swiftshop-fulfillment-mode');
     return (saved as FulfillmentMode) || 'shipping';
   });
   const [fulfillmentDetails, setFulfillmentDetails] = useState<FulfillmentDetails>(() => {
-    const saved = localStorage.getItem('swiftshop-fulfillment-details');
+    const saved = sessionStorage.getItem('swiftshop-fulfillment-details');
     return saved ? JSON.parse(saved) : {
       shippingAddress: '',
       zipCode: '',
@@ -96,15 +96,15 @@ export function ProductProvider({ children }: { children: ReactNode }) {
 
   // Persistence side effects
   useEffect(() => {
-    localStorage.setItem('swiftshop-cart', JSON.stringify(cart));
+    sessionStorage.setItem('swiftshop-cart', JSON.stringify(cart));
   }, [cart]);
 
   useEffect(() => {
-    localStorage.setItem('swiftshop-fulfillment-mode', globalFulfillmentMode);
+    sessionStorage.setItem('swiftshop-fulfillment-mode', globalFulfillmentMode);
   }, [globalFulfillmentMode]);
 
   useEffect(() => {
-    localStorage.setItem('swiftshop-fulfillment-details', JSON.stringify(fulfillmentDetails));
+    sessionStorage.setItem('swiftshop-fulfillment-details', JSON.stringify(fulfillmentDetails));
   }, [fulfillmentDetails]);
 
   const updateFulfillmentDetails = useCallback((details: Partial<FulfillmentDetails>) => {

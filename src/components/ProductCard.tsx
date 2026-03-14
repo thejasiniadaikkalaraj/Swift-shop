@@ -4,6 +4,7 @@ import { Plus, MapPin, Truck, Star } from 'lucide-react';
 import type { Product } from '../types';
 import { LiquidButton } from './LiquidButton';
 import { useCart } from '../hooks/useCart';
+import { CURRENCY_SYMBOL } from '../lib/constants';
 
 interface ProductCardProps {
   product: Product;
@@ -82,8 +83,8 @@ export function ProductCard({ product, index, isLarge = false }: ProductCardProp
       {/* Content */}
       <div className="p-6 sm:p-7 flex flex-col flex-1">
         <div className="flex-1">
-          <p className="text-xs font-medium uppercase tracking-wider mb-1" style={{ color: '#8B5CF6' }}>
-            {product.brand}
+          <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: '#8B5CF6' }}>
+            {product.category}
           </p>
           <h3 className="font-semibold text-base mb-2 line-clamp-2" style={{ color: '#1E1B4B' }}>
             {product.title}
@@ -149,7 +150,7 @@ export function ProductCard({ product, index, isLarge = false }: ProductCardProp
         <div className="flex items-center justify-between mt-auto">
           <div>
             <span className="text-xl font-bold" style={{ color: '#1E1B4B' }}>
-              ${product.price.toFixed(2)}
+              {CURRENCY_SYMBOL}{Math.round(product.price)}
             </span>
           </div>
           <LiquidButton onClick={() => addToCart(product, selectedMode)} size="sm">

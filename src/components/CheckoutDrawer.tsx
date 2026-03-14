@@ -4,6 +4,7 @@ import { useCart } from '../hooks/useCart';
 import { FulfillmentSelector } from './FulfillmentSelector';
 import { LiquidButton } from './LiquidButton';
 import type { CartItem } from '../types';
+import { CURRENCY_SYMBOL } from '../lib/constants';
 
 function CartItemRow({ item }: { item: CartItem }) {
   const { updateQuantity, removeFromCart } = useCart();
@@ -30,7 +31,7 @@ function CartItemRow({ item }: { item: CartItem }) {
           {item.product.title}
         </h4>
         <p className="text-xs mt-0.5" style={{ color: '#6B7280' }}>
-          ${item.product.price.toFixed(2)} each
+          {CURRENCY_SYMBOL}{Math.round(item.product.price)} each
         </p>
         <div className="flex items-center gap-1 mt-1">
           {item.fulfillmentMode === 'pickup' ? (
@@ -239,7 +240,7 @@ export function CheckoutDrawer() {
                 <div className="flex items-center justify-between">
                   <span className="text-sm" style={{ color: '#6B7280' }}>Subtotal</span>
                   <span className="text-lg font-bold" style={{ color: '#1E1B4B' }}>
-                    ${totalPrice.toFixed(2)}
+                    {CURRENCY_SYMBOL}{Math.round(totalPrice)}
                   </span>
                 </div>
                 <LiquidButton onClick={() => {}} className="w-full">

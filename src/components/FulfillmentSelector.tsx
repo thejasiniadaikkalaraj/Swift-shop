@@ -3,20 +3,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Truck, MapPin, ChevronDown } from 'lucide-react';
 import type { FulfillmentMode } from '../types';
 import { useProductContext } from '../context/ProductContext';
+import { MOCK_STORES, ADDRESS_LABELS, ADDRESS_PLACEHOLDERS } from '../lib/constants';
 
 interface FulfillmentSelectorProps {
   mode: FulfillmentMode;
   onModeChange: (mode: FulfillmentMode) => void;
 }
 
-const MOCK_STORES = [
-  { id: 1, name: 'SwiftShop Downtown', distance: '0.3 mi', available: true },
-  { id: 2, name: 'SwiftShop Mall Plaza', distance: '1.2 mi', available: true },
-  { id: 3, name: 'SwiftShop Midtown', distance: '2.8 mi', available: false },
-];
-
 export function FulfillmentSelector({ mode: propMode, onModeChange }: FulfillmentSelectorProps) {
   const [isStoreListExpanded, setStoreListExpanded] = useState(true);
+  const [showPinWarning, setShowPinWarning] = useState(false);
   const { fulfillmentDetails, updateFulfillmentDetails, shippingItems, pickupItems } = useProductContext();
 
   const hasShipping = shippingItems.length > 0;
@@ -107,13 +103,13 @@ export function FulfillmentSelector({ mode: propMode, onModeChange }: Fulfillmen
           >
             <label className="block">
               <span className="text-sm font-medium" style={{ color: '#4B5563' }}>
-                Shipping Address
+                {ADDRESS_LABELS.shippingAddress}
               </span>
               <input
                 type="text"
                 value={fulfillmentDetails.shippingAddress}
                 onChange={(e) => updateFulfillmentDetails({ shippingAddress: e.target.value })}
-                placeholder="123 Main St, City, State"
+                placeholder={ADDRESS_PLACEHOLDERS.shippingAddress}
                 className="mt-1 w-full px-4 py-2.5 rounded-2xl text-sm outline-none transition-shadow"
                 style={{
                   backgroundColor: 'rgba(255, 255, 255, 0.7)',
@@ -131,13 +127,22 @@ export function FulfillmentSelector({ mode: propMode, onModeChange }: Fulfillmen
             <div className="flex gap-3">
               <label className="block flex-1">
                 <span className="text-sm font-medium" style={{ color: '#4B5563' }}>
-                  Zip Code
+                  {ADDRESS_LABELS.zipCode}
                 </span>
                 <input
                   type="text"
+                  inputMode="numeric"
                   value={fulfillmentDetails.zipCode}
-                  onChange={(e) => updateFulfillmentDetails({ zipCode: e.target.value })}
-                  placeholder="10001"
+                  onChange={(e) => {
+                    const rawValue = e.target.value;
+                    if (/[^0-9]/.test(rawValue)) {
+                      setShowPinWarning(true);
+                      setTimeout(() => setShowPinWarning(false), 3000);
+                    }
+                    const value = rawValue.replace(/\D/g, '').slice(0, 6);
+                    updateFulfillmentDetails({ zipCode: value });
+                  }}
+                  placeholder={ADDRESS_PLACEHOLDERS.zipCode}
                   className="mt-1 w-full px-4 py-2.5 rounded-2xl text-sm outline-none transition-shadow"
                   style={{
                     backgroundColor: 'rgba(255, 255, 255, 0.7)',
@@ -151,16 +156,29 @@ export function FulfillmentSelector({ mode: propMode, onModeChange }: Fulfillmen
                     e.target.style.boxShadow = 'none';
                   }}
                 />
+                <AnimatePresence>
+                  {showPinWarning && (
+                    <motion.p
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="text-[10px] font-bold mt-1.5 flex items-center gap-1"
+                      style={{ color: '#F43F5E' }}
+                    >
+                      Numbers only please (6 digits)
+                    </motion.p>
+                  )}
+                </AnimatePresence>
               </label>
               <label className="block flex-1">
                 <span className="text-sm font-medium" style={{ color: '#4B5563' }}>
-                  Apt / Suite
+                  {ADDRESS_LABELS.aptSuite}
                 </span>
                 <input
                   type="text"
                   value={fulfillmentDetails.aptSuite}
                   onChange={(e) => updateFulfillmentDetails({ aptSuite: e.target.value })}
-                  placeholder="Apt 4B"
+                  placeholder={ADDRESS_PLACEHOLDERS.aptSuite}
                   className="mt-1 w-full px-4 py-2.5 rounded-2xl text-sm outline-none transition-shadow"
                   style={{
                     backgroundColor: 'rgba(255, 255, 255, 0.7)',
