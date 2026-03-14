@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+@theme {
+  --color-lavender-light: #F5F3FF;
+  --color-pink-soft: #FDF2F8;
+  --color-teal-accent: #CCFBF1;
+  --color-glass-white: rgba(255, 255, 255, 0.6);
+  --color-glass-white-strong: rgba(255, 255, 255, 0.8);
+  --color-purple-soft: #EDE9FE;
+  --color-pink-accent: #F9A8D4;
+  --color-purple-accent: #C4B5FD;
+  --color-text-primary: #1E1B4B;
+  --color-text-secondary: #6B7280;
+
+  --font-family-outfit: 'Outfit', sans-serif;
+
+  --shadow-glass: 0 8px 30px rgb(244, 114, 182, 0.15);
+  --shadow-glass-lg: 0 12px 40px rgb(244, 114, 182, 0.2);
+  --shadow-card: 0 4px 20px rgb(167, 139, 250, 0.15);
+  --shadow-card-hover: 0 8px 30px rgb(167, 139, 250, 0.25);
+  --shadow-button: 0 4px 15px rgb(244, 114, 182, 0.3);
+
+  --animate-shimmer: shimmer 2s infinite linear;
+}
+
+@layer base {
+  @font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-display: swap;
+    src: url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes pulse-soft {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Handled by Tailwind Preflight */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+  background: linear-gradient(135deg, #FBCFE8, #DDD6FE, #CCFBF1);
+  background-attachment: fixed;
+  min-height: 100vh;
+  color: #1E1B4B;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(167, 139, 250, 0.4);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(167, 139, 250, 0.6);
+}
